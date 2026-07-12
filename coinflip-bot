@@ -1,0 +1,27 @@
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
+import random
+import os
+
+TOKEN = os.getenv("TOKEN")  # Railway Environment Variable
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "👋 Welcome!\n\nUse /flip to flip a coin."
+    )
+
+async def flip(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    result = random.choice(["🪙 Heads", "🪙 Tails"])
+    await update.message.reply_text(f"Result: {result}")
+
+def main():
+    app = Application.builder().token(TOKEN).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("flip", flip))
+
+    print("✅ Bot is running...")
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
